@@ -1,62 +1,42 @@
 # Mesos in one command
 
-This is docker compose config inspired by [blog post by Sebastien Goasguen]
-(http://sebgoa.blogspot.com/2015/03/1-command-to-mesos-with-docker-compose.html).
+It uses official images from mesosphere, some zookeeper repo (not sure what's official), and vagrant private networking to enable interactions with tasks over real network. It also enables docker containerizer.
 
-It uses official images from mesosphere and host networking to enable
-interactions with tasks over real network. It also enables docker containerizer.
-
-No state is persisted between runs so feel free to start over if you
-screwed cluster state or something.
+The attemp is made to persist state insite Vagrant box between restart. Intent is continue developing this configuration and put it in production on permanent virtual machine. Tested by starting a task, then rebooting whole master host (zk, mesos, marathon): when it came back, it knew about running task, it did not start antoher one, and did not restart existing.
 
 ## Versions
 
 * Mesos 0.25.0
-* Marathon 0.13.0-RC3
-* Chronos 2.4.0 (optional)
+* Marathon 0.13.0
+* Zookeeper 3.4.6
 
 ## Usage
 
 Run your cluster:
 
 ```
-docker-compose up -d
+vagrant up
 ```
 
 That's it, use the following URLs:
 
-* http://$DOCKER_IP:5050/ for Mesos master UI
-* http://$DOCKER_IP:8080/ for Marathon UI
-* http://$DOCKER_IP:8888/ for Chronos UI
+* http://192.168.33.10:5050/ for Mesos master UI
+* http://192.168.33.10:8080/ for Marathon UI
 
 To kill your cluster and wipe all state to start fresh:
 
 ```
-docker-compose stop
-docker-compose rm -f -v
+vagrant destroy
 ```
 
-## Mesos slave IP address
+## IP addresses
 
-Mesos tasks have `HOST` env variable passed by mesos. The value by default
-is the output of `hostname -s` command. In many environments local hostname
-resolves to 127.0.0.1. This leads to mesos tasks listening on `127.0.0.1`.
+Mesos is sensitive to IP addresses, and needs to know explicitly how to advertise itself (both slave AND master). For that reason, IP address has been assigned to both machines explicitly, and added to MESOS environment variables. If you need to change IPs, make sure to do that in all locations, otherwise slave might not connect to master, or it might cause constant disconnects.
 
-To fix this issue, open `docker-compose.yml`, find `SLAVE_IP_GOES_HERE` and
-replace it with the IP address you want your tasks to listen on.
+## More slaves
 
-## Optional services
+You can copy slave machine definition in vagrant file, update provision and compose scripts, and get more slaves started.
 
-In `docker-compose.yml` you can uncomment additional containers.
+## Caveats
 
-### Second mesos-slave
-
-Uncomment `slave-two` section to get access to the second mesos-slave. Port
-ranges of two mesos-slaves are separated so it shouldn't be an issue.
-
-Note that both slaves share same memory so you might see OOM if you allocate
-and use more memory than your docker host has.
-
-### Chronos
-
-Uncomment `chronos` section to get access to Chronos framework.
+For some reason, slave did not want to run right away, and I had to install libapparmor1 to fix docker error.
