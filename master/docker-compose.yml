@@ -1,5 +1,5 @@
 zk:
-  image: jplock/zookeeper
+  image: jplock/zookeeper:3.4.6
   restart: always
   ports:
    - 2181:2181

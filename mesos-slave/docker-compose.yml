@@ -1,5 +1,5 @@
 slave-one:
-  build: /vagrant/docker-build
+  build: /vagrant/mesos-slave
   restart: always
   net: host
   pid: host

@@ -12,5 +12,5 @@ mkdir /data/mesos/lib
 mkdir /data/mesos/logs
 mkdir /data/zookeeper/data
 mkdir /data/zookeeper/logs
-cd /vagrant
+cd /vagrant/master
 docker-compose up -d
