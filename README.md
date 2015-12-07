@@ -23,6 +23,8 @@ That's it, use the following URLs:
 * http://192.168.33.10:5050/ for Mesos master UI
 * http://192.168.33.10:8080/ for Marathon UI
 
+To start hello world web server, run hello-world.sh. This will send a task to marathon with a very simple docker image. Go to marathon UI to find out where to go for propoer host and port.
+
 To kill your cluster and wipe all state to start fresh:
 
 ```
