@@ -1,0 +1,22 @@
+{
+	"cpus":0.1,
+	"mem":16,
+	"disk":0,
+	"instances":1,
+	"container":
+	{
+		"docker":
+		{
+			"image":"tutum/hello-world",
+			"network":"BRIDGE",
+			"portMappings":
+			[
+				{
+					"containerPort":80,
+					"protocol":"tcp"
+				}
+			]
+		}
+	},
+	"id":"hello-world"
+}
