@@ -6,9 +6,10 @@ The attemp is made to persist state insite Vagrant box between restart. Intent i
 
 ## Versions
 
-* Mesos 0.25.0
+* Mesos 0.26.0
 * Marathon 0.13.0
 * Zookeeper 3.4.6
+* Docker registry 2
 
 ## Usage
 
@@ -38,6 +39,10 @@ Mesos is sensitive to IP addresses, and needs to know explicitly how to advertis
 ## More slaves
 
 You can copy slave machine definition in vagrant file, update provision and compose scripts, and get more slaves started.
+
+## Docker Registry
+
+Master server starts with Docker Registry that persists images on the master host file system. It's safe to restart the registry to keep all images.
 
 ## Caveats
 
